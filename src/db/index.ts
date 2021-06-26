@@ -1,11 +1,15 @@
-import { MongoClient } from "mongodb";
+import dotenv from "dotenv"
+import { MongoClient, Db } from "mongodb";
 
-const dbString = process.env.MONGO_URL;
+dotenv.config();
 
-export async function connect() {
-  const client = new MongoClient(dbString, {
-    useUnifiedTopology: true,
-  });
-  const connection = await client.connect();
+async function createDBConnection() : Promise<Db> {
+  const dbString : string = process.env.MONGO_URL;
+  const client : MongoClient = new MongoClient(dbString, { useUnifiedTopology : true });
+  const connection : MongoClient = await client.connect();
   return connection.db("sample_airbnb");
 }
+
+const mongoClient : Promise<Db> = createDBConnection();
+
+export default mongoClient;
